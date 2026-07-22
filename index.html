@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muscle Factory — Premium Strength Gym, Anjuna Goa</title>
+<style>
+  :root{
+    --bg-0:#101012;
+    --bg-1:#19191c;
+    --bg-2:#212226;
+    --bg-3:#2a2b30;
+    --line:#333338;
+    --line-strong:#46474d;
+    --ink:#f2f2f0;
+    --steel:#c9cacd;
+    --concrete:#8f9095;
+    --gold:#cda545;
+    --gold-bright:#e6bd5a;
+    --radius:4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background:var(--bg-0);
+    color:var(--steel);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+  h1,h2,h3,h4{
+    font-family:'Arial Narrow', 'Helvetica Neue Condensed', Arial, sans-serif;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    font-weight:800;
+    color:var(--ink);
+  }
+  .mono{font-family:'Consolas','Courier New',monospace;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .container{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:'Consolas','Courier New',monospace;
+    font-size:12px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--concrete);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:22px; height:2px; background:var(--gold); display:inline-block;}
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal-stagger > *{opacity:0; transform:translateY(28px); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);}
+  .reveal-stagger.in > *{opacity:1; transform:translateY(0);}
+  .reveal-stagger.in > *:nth-child(1){transition-delay:.03s;}
+  .reveal-stagger.in > *:nth-child(2){transition-delay:.11s;}
+  .reveal-stagger.in > *:nth-child(3){transition-delay:.19s;}
+  .reveal-stagger.in > *:nth-child(4){transition-delay:.27s;}
+  .reveal-stagger.in > *:nth-child(5){transition-delay:.35s;}
+  .reveal-stagger.in > *:nth-child(6){transition-delay:.43s;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(16,16,18,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transition:border-color .3s, box-shadow .3s;
+  }
+  header.scrolled{border-bottom-color:var(--gold); box-shadow:0 8px 24px rgba(0,0,0,0.35);}
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    color:var(--ink); font-size:20px; letter-spacing:0.08em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo span{color:var(--gold); display:inline-block; animation:pulse-dot 2.6s ease-in-out infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1; transform:scale(1);}50%{opacity:.55; transform:scale(.85);}}
+  .navlinks{display:flex; gap:28px; align-items:center;}
+  .navlinks a{
+    position:relative;
+    color:var(--concrete); font-size:13px; letter-spacing:0.12em; text-transform:uppercase;
+    font-weight:600; padding:6px 0;
+  }
+  .navlinks a::after{
+    content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px; background:var(--gold);
+    transition:width .3s ease;
+  }
+  .navlinks a:hover{color:var(--ink);}
+  .navlinks a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--gold); color:#171712; padding:10px 18px;
+    font-size:12px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+    border-radius:var(--radius);
+    transition:background .2s, transform .15s;
+  }
+  .nav-cta:hover{background:var(--gold-bright); transform:translateY(-1px);}
+  .menu-toggle{display:none; background:none; border:none; color:var(--ink); font-size:26px; cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 26px),
+      radial-gradient(ellipse at 15% 0%, #232327 0%, #101012 55%);
+    background-size:auto, auto;
+    color:var(--ink);
+    padding:110px 24px 0;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(135deg, rgba(205,165,69,0.035) 0 2px, transparent 2px 30px);
+    background-size:200% 200%;
+    animation:driftStripes 26s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes driftStripes{
+    0%{background-position:0% 0%;}
+    100%{background-position:200% 200%;}
+  }
+  .hero-inner{
+    position:relative; z-index:1;
+    max-width:1180px; margin:0 auto;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+    padding-bottom:70px;
+  }
+  .stamp-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--gold); color:var(--gold);
+    font-family:'Consolas','Courier New',monospace; font-size:12px; letter-spacing:0.2em;
+    padding:6px 12px; border-radius:20px; margin-bottom:24px; text-transform:uppercase;
+    opacity:0; animation:fadeUp .7s ease forwards;
+  }
+  .stamp-tag::before{content:'●'; font-size:8px; animation:pulse-dot 2.2s ease-in-out infinite;}
+  .hero h1{
+    font-size:clamp(42px, 6.5vw, 84px);
+    line-height:0.95;
+    color:var(--ink);
+    margin-bottom:20px;
+    opacity:0; animation:fadeUp .8s ease .12s forwards;
+  }
+  .hero h1 em{
+    font-style:normal;
+    -webkit-text-stroke:1.5px var(--gold);
+    color:transparent;
+  }
+  .hero p.lead{
+    font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal;
+    font-weight:400; color:var(--concrete); font-size:17px; max-width:480px; margin-bottom:34px;
+    opacity:0; animation:fadeUp .8s ease .24s forwards;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; opacity:0; animation:fadeUp .8s ease .36s forwards;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);}}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 28px; font-size:13px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+    border-radius:var(--radius); cursor:pointer; border:2px solid transparent;
+    transition:transform .15s ease, background .2s, box-shadow .25s, border-color .2s;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--gold); color:#171712;}
+  .btn-primary:hover{background:var(--gold-bright); box-shadow:0 10px 26px rgba(205,165,69,0.28); transform:translateY(-2px);}
+  .btn-outline{border-color:var(--line-strong); color:var(--ink);}
+  .btn-outline:hover{border-color:var(--gold); color:var(--gold); transform:translateY(-2px);}
+  .btn-whatsapp{background:#25D366; color:#0b2b12;}
+  .btn-whatsapp:hover{background:#22c15e; box-shadow:0 10px 26px rgba(37,211,102,0.25); transform:translateY(-2px);}
+
+  /* Spec plate — signature element */
+  .plate{
+    position:relative;
+    background:linear-gradient(180deg,#2c2d30,#1c1d20);
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    padding:30px 26px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 45px rgba(0,0,0,0.5);
+    opacity:0; animation:fadeUp .9s ease .3s forwards, floatPlate 6s ease-in-out 1.2s infinite;
+  }
+  @keyframes floatPlate{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .plate::before,.plate::after,.plate .rivet-tl,.plate .rivet-br{
+    content:''; position:absolute; width:9px; height:9px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #6d6e6f, #333 70%, #1c1c1c);
+    box-shadow:0 1px 2px rgba(0,0,0,0.6);
+  }
+  .plate::before{top:10px; left:10px;}
+  .plate::after{top:10px; right:10px;}
+  .plate .rivet-tl{bottom:10px; left:10px;}
+  .plate .rivet-br{bottom:10px; right:10px;}
+  .plate-eyebrow{
+    font-family:'Consolas','Courier New',monospace; font-size:11px; letter-spacing:0.15em;
+    color:var(--gold); text-transform:uppercase; margin-bottom:6px;
+  }
+  .plate-title{font-size:22px; color:var(--ink); margin-bottom:14px; letter-spacing:0.04em;}
+  .spec-row{
+    display:flex; justify-content:space-between; padding:8px 0;
+    border-top:1px dashed var(--line-strong); font-family:'Consolas','Courier New',monospace; font-size:13px;
+  }
+  .spec-row:first-of-type{border-top:none;}
+  .spec-row span:first-child{color:var(--concrete);}
+  .spec-row span:last-child{font-weight:700; color:var(--ink);}
+
+  /* ---------- STATS BAR ---------- */
+  .stats-bar{
+    background:var(--bg-1); border-top:1px solid var(--line); position:relative; z-index:1;
+    padding:26px 24px;
+  }
+  .stats-inner{
+    max-width:1180px; margin:0 auto; display:grid;
+    grid-template-columns:repeat(4,1fr); gap:20px; text-align:center;
+  }
+  .stat-num{font-family:'Consolas','Courier New',monospace; font-size:30px; color:var(--gold); font-weight:700;}
+  .stat-label{font-size:11px; letter-spacing:0.15em; color:var(--concrete); text-transform:uppercase; margin-top:4px;}
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:100px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(30px,4vw,46px); margin:14px 0 16px;}
+  .section-head p{font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal; font-weight:400; color:var(--concrete); font-size:16px;}
+
+  /* ---------- MACHINERY ---------- */
+  .machinery{background:var(--bg-0);}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .machine-card{
+    background:var(--bg-1); border:1px solid var(--line); border-radius:8px;
+    padding:28px; position:relative; overflow:hidden;
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .machine-card:hover{transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(205,165,69,0.25); border-color:var(--gold);}
+  .machine-tag{
+    position:absolute; top:0; right:0; background:var(--gold); color:#171712;
+    font-family:'Consolas','Courier New',monospace; font-size:10px; font-weight:800;
+    padding:5px 12px; border-radius:0 0 0 8px; letter-spacing:0.1em;
+  }
+  .machine-icon{width:56px; height:56px; margin-bottom:20px; transition:transform .3s ease;}
+  .machine-card:hover .machine-icon{transform:scale(1.08) rotate(-2deg);}
+  .machine-card h3{font-size:19px; margin-bottom:10px; letter-spacing:0.02em;}
+  .machine-card p{font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal; font-weight:400; color:var(--concrete); font-size:14.5px;}
+
+  /* ---------- PLATES / DUMBBELLS ---------- */
+  .loadout{background:var(--bg-1);}
+  .stack-visual{
+    display:flex; align-items:flex-end; gap:6px; height:150px; margin-bottom:40px;
+  }
+  .plate-disc{
+    background:linear-gradient(180deg,#3a3b3e,#18191b);
+    border:2px solid var(--line-strong); border-radius:50%;
+    flex-shrink:0;
+    transform:scaleY(0); transform-origin:bottom; transition:transform .5s cubic-bezier(.2,.8,.3,1.2);
+  }
+  .stack-visual.in .plate-disc{transform:scaleY(1);}
+  .stack-visual.in .plate-disc:nth-child(1){transition-delay:.02s;}
+  .stack-visual.in .plate-disc:nth-child(2){transition-delay:.08s;}
+  .stack-visual.in .plate-disc:nth-child(3){transition-delay:.14s;}
+  .stack-visual.in .plate-disc:nth-child(4){transition-delay:.20s;}
+  .stack-visual.in .plate-disc:nth-child(5){transition-delay:.26s;}
+  .stack-visual.in .plate-disc:nth-child(6){transition-delay:.32s;}
+  .stack-visual.in .plate-disc:nth-child(7){transition-delay:.38s;}
+  .weight-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .weight-card{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:8px; padding:24px 20px; text-align:center;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .weight-card:hover{transform:translateY(-6px); border-color:var(--gold);}
+  .weight-card .fig{font-family:'Consolas','Courier New',monospace; font-size:26px; color:var(--gold); font-weight:700;}
+  .weight-card .lbl{font-size:12px; letter-spacing:0.1em; color:var(--steel); text-transform:uppercase; margin-top:6px;}
+  .weight-card .desc{font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal; color:var(--concrete); font-size:13px; margin-top:10px; font-weight:400;}
+
+  /* ---------- COACHES ---------- */
+  .coaches{background:var(--bg-0);}
+  .coach-card{
+    background:var(--bg-1); border-radius:8px; overflow:hidden; border:1px solid var(--line);
+    transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .coach-card:hover{transform:translateY(-8px); border-color:var(--gold); box-shadow:0 20px 40px rgba(0,0,0,0.45);}
+  .coach-photo{
+    height:190px; background:linear-gradient(135deg,#2c2d2f,#17181a);
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .coach-photo .initials{
+    font-family:'Consolas','Courier New',monospace; font-size:44px; font-weight:700; color:rgba(242,242,240,0.85);
+    letter-spacing:0.05em; transition:transform .35s ease;
+  }
+  .coach-card:hover .initials{transform:scale(1.1);}
+  .coach-photo::after{
+    content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--gold);
+  }
+  .coach-body{padding:22px 24px;}
+  .coach-body h3{font-size:18px; margin-bottom:4px;}
+  .coach-role{font-family:'Consolas','Courier New',monospace; font-size:11px; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; display:block;}
+  .coach-body p{font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal; font-weight:400; color:var(--concrete); font-size:14px;}
+  .coach-specs{display:flex; gap:16px; margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);}
+  .coach-specs div{font-family:'Consolas','Courier New',monospace; font-size:12px; color:var(--concrete);}
+  .coach-specs strong{display:block; color:var(--ink); font-size:15px;}
+
+  /* ---------- GALLERY STRIP (facility) ---------- */
+  .facility{background:var(--bg-1);}
+  .facility-grid{display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:repeat(2,160px); gap:14px;}
+  .facility-block{
+    border-radius:8px; position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:16px;
+    color:var(--ink); font-family:'Consolas','Courier New',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    transition:transform .35s ease;
+  }
+  .facility-block:hover{transform:scale(1.02);}
+  .facility-block::before{content:''; position:absolute; inset:0; background:linear-gradient(160deg,#2c2d30,#101012); transition:background .3s;}
+  .facility-block:hover::before{background:linear-gradient(160deg,#3a3b3f,#101012);}
+  .facility-block span{position:relative; z-index:1;}
+  .facility-block:nth-child(1){grid-row:span 2;}
+  .facility-block:nth-child(1)::before{background:linear-gradient(160deg,#38393d,#101012);}
+  .facility-block:nth-child(3)::before{background:linear-gradient(160deg,#232427,#0c0c0e);}
+
+  /* ---------- INQUIRY ---------- */
+  .inquiry{background:var(--bg-0);}
+  .inquiry-wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    background:var(--bg-1); border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  }
+  .inquiry-side{
+    background:var(--bg-2); color:var(--ink); padding:48px 40px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .inquiry-side h3{color:var(--ink); font-size:24px; margin-bottom:16px;}
+  .inquiry-side p{font-family:'Segoe UI',sans-serif; text-transform:none; letter-spacing:normal; font-weight:400; color:var(--concrete); font-size:14.5px; margin-bottom:24px;}
+  .contact-line{display:flex; align-items:center; gap:12px; margin-bottom:14px; font-size:14px; color:var(--steel);}
+  .contact-line .ico{
+    width:34px; height:34px; border:1px solid var(--line-strong); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    color:var(--gold); font-family:'Consolas','Courier New',monospace; font-size:14px;
+  }
+  .inquiry-form{padding:48px 40px;}
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block; font-family:'Consolas','Courier New',monospace; font-size:11px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--concrete); margin-bottom:8px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; padding:12px 14px; border:1px solid var(--line-strong); border-radius:var(--radius);
+    background:var(--bg-0); font-size:14.5px; font-family:inherit; color:var(--ink);
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(205,165,69,0.18);}
+  .field textarea{resize:vertical; min-height:90px;}
+  .form-note{font-size:12.5px; color:var(--concrete); margin-top:6px;}
+
+  /* ---------- LOCATION ---------- */
+  .location{background:var(--bg-1);}
+  .loc-wrap{display:grid; grid-template-columns:1fr 1fr; gap:0; border-radius:10px; overflow:hidden; border:1px solid var(--line);}
+  .loc-info{background:var(--bg-2); color:var(--ink); padding:48px 40px;}
+  .loc-info h3{color:var(--ink); font-size:24px; margin-bottom:18px;}
+  .loc-addr{font-size:15px; color:var(--steel); line-height:1.8; margin-bottom:26px; font-family:'Segoe UI',sans-serif;}
+  .loc-hours{border-top:1px dashed var(--line-strong); padding-top:18px; margin-top:6px;}
+  .loc-hours .row{display:flex; justify-content:space-between; font-size:13.5px; padding:5px 0; color:var(--concrete); font-family:'Consolas','Courier New',monospace;}
+  .loc-hours .row strong{color:var(--ink);}
+  .map-embed{min-height:420px; width:100%; border:none; filter:grayscale(0.25) contrast(1.05);}
+
+  /* ---------- WHATSAPP FLOAT ---------- */
+  .wa-float{
+    position:fixed; bottom:26px; right:26px; z-index:200;
+    background:#25D366; color:#0b2b12; width:60px; height:60px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 22px rgba(0,0,0,0.5);
+    font-size:28px; border:2px solid #1ea952;
+    transition:transform .2s ease;
+    animation:waPulse 2.8s ease-in-out infinite;
+  }
+  .wa-float:hover{transform:scale(1.08); animation-play-state:paused;}
+  @keyframes waPulse{
+    0%,100%{box-shadow:0 8px 22px rgba(0,0,0,0.5), 0 0 0 0 rgba(37,211,102,0.5);}
+    50%{box-shadow:0 8px 22px rgba(0,0,0,0.5), 0 0 0 10px rgba(37,211,102,0);}
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--bg-0); color:var(--concrete); padding:50px 24px 30px; border-top:1px solid var(--line);}
+  .footer-inner{max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; border-bottom:1px solid var(--line); padding-bottom:30px;}
+  .footer-brand{font-size:20px; color:var(--ink); letter-spacing:0.08em;}
+  .footer-brand span{color:var(--gold);}
+  .footer-links{display:flex; gap:28px; font-size:13px; letter-spacing:0.05em;}
+  .footer-links a:hover{color:var(--ink);}
+  .footer-bottom{max-width:1180px; margin:20px auto 0; font-size:12px; color:var(--line-strong); text-align:center; font-family:'Consolas','Courier New',monospace;}
+
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr;}
+    .grid-3{grid-template-columns:1fr 1fr;}
+    .stats-inner{grid-template-columns:repeat(2,1fr); gap:26px;}
+    .weight-grid{grid-template-columns:1fr 1fr;}
+    .inquiry-wrap, .loc-wrap{grid-template-columns:1fr;}
+    .facility-grid{grid-template-columns:1fr 1fr; grid-template-rows:repeat(3,150px);}
+    .facility-block:nth-child(1){grid-column:span 2; grid-row:span 1;}
+  }
+  @media (max-width:640px){
+    .navlinks{display:none;}
+    .menu-toggle{display:block;}
+    .grid-3{grid-template-columns:1fr;}
+    .stats-inner{grid-template-columns:repeat(2,1fr);}
+    .weight-grid{grid-template-columns:1fr 1fr;}
+    section{padding:64px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav">
+    <div class="logo">MUSCLE<span>■</span>FACTORY</div>
+    <nav class="navlinks">
+      <a href="#machinery">Machinery</a>
+      <a href="#coaches">Coaches</a>
+      <a href="#loadout">Plates &amp; Dumbbells</a>
+      <a href="#inquiry">Inquiry</a>
+      <a href="#location">Location</a>
+    </nav>
+    <a href="https://wa.me/919876543210?text=Hi%20Muscle%20Factory%2C%20I%27d%20like%20to%20know%20more%20about%20membership." class="nav-cta">WhatsApp Us</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="stamp-tag">Est. in Anjuna, Goa</div>
+      <h1>Built like<br><em>machinery.</em><br>Trained like<br>athletes.</h1>
+      <p class="lead">A premium strength facility engineered around industrial-grade equipment, competition plates, and coaches who've actually competed. No shortcuts, no plastic weights.</p>
+      <div class="hero-ctas">
+        <a href="#inquiry" class="btn btn-primary">Book a free tour</a>
+        <a href="https://wa.me/919876543210?text=Hi%20Muscle%20Factory%2C%20I%27d%20like%20to%20know%20more%20about%20membership." class="btn btn-whatsapp">Chat on WhatsApp</a>
+      </div>
+    </div>
+    <div class="plate">
+      <div class="rivet-tl"></div><div class="rivet-br"></div>
+      <div class="plate-eyebrow">Facility spec plate</div>
+      <div class="plate-title">Muscle Factory MK.I</div>
+      <div class="spec-row"><span>Floor area</span><span>8,500 sq ft</span></div>
+      <div class="spec-row"><span>Machines installed</span><span>40+ units</span></div>
+      <div class="spec-row"><span>Free weight range</span><span>1&nbsp;–&nbsp;60 KG</span></div>
+      <div class="spec-row"><span>Certified coaches</span><span>08 on floor</span></div>
+      <div class="spec-row"><span>Operating hours</span><span>05:00 – 22:00</span></div>
+      <div class="spec-row"><span>Location</span><span>Anjuna, Goa</span></div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div><div class="stat-num" data-count="40" data-suffix="+">0</div><div class="stat-label">Premium machines</div></div>
+      <div><div class="stat-num" data-count="8" data-suffix="">0</div><div class="stat-label">Certified coaches</div></div>
+      <div><div class="stat-num" data-count="60" data-suffix="kg">0</div><div class="stat-label">Max plate load</div></div>
+      <div><div class="stat-num" data-count="17" data-suffix="hrs">0</div><div class="stat-label">Daily access</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="machinery" id="machinery">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Equipment floor</div>
+      <h2>Machinery that means business</h2>
+      <p>Every station is commercial-grade, sourced for durability and biomechanical precision — not the gym you're used to outgrowing.</p>
+    </div>
+    <div class="grid-3 reveal-stagger">
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 01</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="42" width="52" height="6" rx="2" fill="#0f0f10"/>
+          <rect x="14" y="10" width="8" height="34" rx="2" fill="#5a5b60"/>
+          <rect x="42" y="10" width="8" height="34" rx="2" fill="#5a5b60"/>
+          <rect x="10" y="26" width="44" height="6" rx="2" fill="#cda545"/>
+          <circle cx="18" cy="8" r="4" fill="#0f0f10"/><circle cx="46" cy="8" r="4" fill="#0f0f10"/>
+        </svg>
+        <h3>Power rack stations</h3>
+        <p>Heavy-gauge steel racks for squats, pulls and presses, each fitted with safety arms and Olympic bars.</p>
+      </div>
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 02</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="28" y="6" width="8" height="24" rx="2" fill="#5a5b60"/>
+          <circle cx="32" cy="34" r="6" fill="#cda545"/>
+          <rect x="10" y="44" width="44" height="6" rx="2" fill="#0f0f10"/>
+          <rect x="16" y="30" width="6" height="20" fill="#5a5b60"/>
+          <rect x="42" y="30" width="6" height="20" fill="#5a5b60"/>
+        </svg>
+        <h3>Cable &amp; pulley systems</h3>
+        <p>Dual adjustable pulleys with a full attachment wall for functional, unilateral and rehab-style training.</p>
+      </div>
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 03</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="20" width="48" height="10" rx="3" fill="#0f0f10"/>
+          <rect x="4" y="18" width="8" height="14" rx="2" fill="#cda545"/>
+          <rect x="52" y="18" width="8" height="14" rx="2" fill="#cda545"/>
+          <rect x="18" y="34" width="28" height="6" rx="2" fill="#5a5b60"/>
+          <rect x="24" y="42" width="16" height="14" rx="2" fill="#5a5b60"/>
+        </svg>
+        <h3>Plate-loaded presses</h3>
+        <p>Leverage-arm chest, shoulder and leg press units built for progressive, joint-friendly overload.</p>
+      </div>
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 04</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="30" width="44" height="8" rx="4" fill="#0f0f10"/>
+          <circle cx="14" cy="34" r="10" fill="#5a5b60"/>
+          <circle cx="50" cy="34" r="10" fill="#5a5b60"/>
+          <circle cx="14" cy="34" r="4" fill="#cda545"/>
+          <circle cx="50" cy="34" r="4" fill="#cda545"/>
+        </svg>
+        <h3>Olympic barbell zone</h3>
+        <p>Dedicated lifting platforms with bumper plates for clean, snatch and deadlift work.</p>
+      </div>
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 05</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="12" y="12" width="40" height="10" rx="2" fill="#5a5b60"/>
+          <rect x="12" y="26" width="40" height="10" rx="2" fill="#0f0f10"/>
+          <rect x="12" y="40" width="40" height="10" rx="2" fill="#cda545"/>
+        </svg>
+        <h3>Cardio conditioning deck</h3>
+        <p>Ski ergs, sleds and assault bikes for engine work between strength blocks.</p>
+      </div>
+
+      <div class="machine-card">
+        <span class="machine-tag">Line 06</span>
+        <svg class="machine-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="8" width="24" height="8" rx="2" fill="#0f0f10"/>
+          <rect x="26" y="16" width="12" height="30" fill="#5a5b60"/>
+          <rect x="14" y="46" width="36" height="8" rx="2" fill="#cda545"/>
+        </svg>
+        <h3>Functional turf bay</h3>
+        <p>Open-floor turf for sled pushes, tyre flips and mobility work — a proper factory floor for conditioning.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="loadout" id="loadout">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Free weight arsenal</div>
+      <h2>Premium plates &amp; dumbbells</h2>
+      <p>Competition-grade iron and rubber, calibrated in exact increments — because your progress shouldn't be limited by worn-out gear.</p>
+    </div>
+    <div class="stack-visual reveal" aria-hidden="true">
+      <div class="plate-disc" style="width:60px;height:150px;"></div>
+      <div class="plate-disc" style="width:52px;height:130px;"></div>
+      <div class="plate-disc" style="width:44px;height:112px;"></div>
+      <div class="plate-disc" style="width:36px;height:96px;"></div>
+      <div class="plate-disc" style="width:30px;height:80px;"></div>
+      <div class="plate-disc" style="width:24px;height:64px;"></div>
+      <div class="plate-disc" style="width:20px;height:50px;"></div>
+    </div>
+    <div class="weight-grid reveal-stagger">
+      <div class="weight-card">
+        <div class="fig">1–25kg</div>
+        <div class="lbl">Rubber hex dumbbells</div>
+        <div class="desc">Full pairs across every increment, no gaps in the rack.</div>
+      </div>
+      <div class="weight-card">
+        <div class="fig">1.25–25kg</div>
+        <div class="lbl">Olympic bumper plates</div>
+        <div class="desc">Colour-coded, low-bounce, competition calibrated.</div>
+      </div>
+      <div class="weight-card">
+        <div class="fig">30–60kg</div>
+        <div class="lbl">Adjustable dumbbells</div>
+        <div class="desc">Quick-lock collars for heavy unilateral work.</div>
+      </div>
+      <div class="weight-card">
+        <div class="fig">20 &amp; 15kg</div>
+        <div class="lbl">Olympic barbells</div>
+        <div class="desc">Men's and women's specification bars, knurled grip.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coaches" id="coaches">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Coaching floor</div>
+      <h2>Highly trained coaches</h2>
+      <p>Every coach on the floor is certified, competition-experienced, and hands-on from your first session.</p>
+    </div>
+    <div class="grid-3 reveal-stagger">
+      <div class="coach-card">
+        <div class="coach-photo"><span class="initials">RK</span></div>
+        <div class="coach-body">
+          <span class="coach-role">Head strength coach</span>
+          <h3>Rohan Kamat</h3>
+          <p>12 years coaching powerlifting and hypertrophy programs, former state-level lifter.</p>
+          <div class="coach-specs">
+            <div><strong>12yr</strong>Experience</div>
+            <div><strong>CSCS</strong>Certified</div>
+            <div><strong>PL</strong>Specialty</div>
+          </div>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-photo"><span class="initials">AF</span></div>
+        <div class="coach-body">
+          <span class="coach-role">Functional &amp; mobility coach</span>
+          <h3>Ana Fernandes</h3>
+          <p>Specialises in injury-safe programming, mobility and functional conditioning for all levels.</p>
+          <div class="coach-specs">
+            <div><strong>8yr</strong>Experience</div>
+            <div><strong>NASM</strong>Certified</div>
+            <div><strong>FN</strong>Specialty</div>
+          </div>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-photo"><span class="initials">VS</span></div>
+        <div class="coach-body">
+          <span class="coach-role">Olympic lifting coach</span>
+          <h3>Vikram Shetty</h3>
+          <p>National-level weightlifter turned coach, focused on technique-first strength development.</p>
+          <div class="coach-specs">
+            <div><strong>10yr</strong>Experience</div>
+            <div><strong>USAW</strong>Certified</div>
+            <div><strong>OL</strong>Specialty</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="facility">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Inside the factory</div>
+      <h2>A floor built for serious training</h2>
+    </div>
+    <div class="facility-grid reveal-stagger">
+      <div class="facility-block"><span>Main strength floor</span></div>
+      <div class="facility-block"><span>Free weight zone</span></div>
+      <div class="facility-block"><span>Cardio deck</span></div>
+      <div class="facility-block"><span>Functional turf bay</span></div>
+      <div class="facility-block"><span>Recovery corner</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="inquiry" id="inquiry">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Get started</div>
+      <h2>Send us an inquiry</h2>
+      <p>Tell us your goals and we'll get back with membership options, trial slots, and coaching plans.</p>
+    </div>
+    <div class="inquiry-wrap reveal">
+      <div class="inquiry-side">
+        <div>
+          <h3>Prefer to talk directly?</h3>
+          <p>Reach the front desk instantly on WhatsApp, or use the form and we'll follow up the same day.</p>
+        </div>
+        <div>
+          <div class="contact-line"><span class="ico">@</span> hello@musclefactory.gym</div>
+          <div class="contact-line"><span class="ico">#</span> +91 98765 43210</div>
+          <div class="contact-line"><span class="ico">📍</span> Anjuna, Goa – 403509</div>
+          <a href="https://wa.me/919876543210?text=Hi%20Muscle%20Factory%2C%20I%27d%20like%20to%20know%20more%20about%20membership." class="btn btn-whatsapp" style="margin-top:18px; width:100%; justify-content:center;">Message on WhatsApp</a>
+        </div>
+      </div>
+      <form class="inquiry-form" id="inquiryForm">
+        <div class="field">
+          <label for="fname">Full name</label>
+          <input type="text" id="fname" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="fphone">Phone number</label>
+          <input type="tel" id="fphone" placeholder="+91 98765 43210" required>
+        </div>
+        <div class="field">
+          <label for="fgoal">Primary goal</label>
+          <select id="fgoal">
+            <option>Strength training</option>
+            <option>Muscle building</option>
+            <option>Weight loss</option>
+            <option>Olympic lifting</option>
+            <option>General fitness</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fmsg">Message</label>
+          <textarea id="fmsg" placeholder="Tell us about your fitness goals or preferred timing"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; border:none;">Send inquiry via WhatsApp</button>
+        <p class="form-note">This sends your details straight to our front desk on WhatsApp — no account needed.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="location" id="location">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Find us</div>
+      <h2>Visit the factory floor</h2>
+    </div>
+    <div class="loc-wrap reveal">
+      <div class="loc-info">
+        <h3>Muscle Factory</h3>
+        <p class="loc-addr">📍 Near Our Lady Of Health Chapel,<br>Mazal Waddo, Anjuna,<br>Goa – 403509</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Near+Our+Lady+Of+Health+Chapel%2C+Mazal+Waddo%2C+Anjuna%2C+Goa+403509" class="btn btn-outline">Get directions</a>
+        <div class="loc-hours">
+          <div class="row"><span>Monday – Saturday</span><strong>05:00 – 22:00</strong></div>
+          <div class="row"><span>Sunday</span><strong>06:00 – 20:00</strong></div>
+        </div>
+      </div>
+      <iframe class="map-embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=Near+Our+Lady+Of+Health+Chapel,+Mazal+Waddo,+Anjuna,+Goa+403509&output=embed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<a href="https://wa.me/919876543210?text=Hi%20Muscle%20Factory%2C%20I%27d%20like%20to%20know%20more%20about%20membership." class="wa-float" aria-label="Chat on WhatsApp">☎</a>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">MUSCLE<span>■</span>FACTORY</div>
+    <div class="footer-links">
+      <a href="#machinery">Machinery</a>
+      <a href="#coaches">Coaches</a>
+      <a href="#loadout">Plates &amp; Dumbbells</a>
+      <a href="#inquiry">Inquiry</a>
+      <a href="#location">Location</a>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2026 Muscle Factory, Anjuna, Goa. Built for serious training.</p>
+</footer>
+
+<script>
+document.getElementById('inquiryForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('fname').value.trim();
+  var phone = document.getElementById('fphone').value.trim();
+  var goal = document.getElementById('fgoal').value;
+  var msg = document.getElementById('fmsg').value.trim();
+  var text = "Hi Muscle Factory, I'd like to enquire about membership.\n"
+    + "Name: " + name + "\n"
+    + "Phone: " + phone + "\n"
+    + "Goal: " + goal
+    + (msg ? ("\nMessage: " + msg) : "");
+  var url = "https://wa.me/919876543210?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+});
+
+// Sticky header scroll shadow
+var header = document.getElementById('siteHeader');
+window.addEventListener('scroll', function(){
+  if(window.scrollY > 20){ header.classList.add('scrolled'); }
+  else{ header.classList.remove('scrolled'); }
+});
+
+// Scroll reveal
+var revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .stack-visual');
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15});
+revealEls.forEach(function(el){ io.observe(el); });
+
+// Animated stat counters
+var statEls = document.querySelectorAll('.stat-num');
+var counted = false;
+var statsIo = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting && !counted){
+      counted = true;
+      statEls.forEach(function(el){
+        var target = parseInt(el.getAttribute('data-count'), 10);
+        var suffix = el.getAttribute('data-suffix') || '';
+        var start = 0;
+        var duration = 1400;
+        var startTime = null;
+        function step(ts){
+          if(!startTime) startTime = ts;
+          var progress = Math.min((ts - startTime) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var val = Math.round(eased * target);
+          el.textContent = val + suffix;
+          if(progress < 1){ requestAnimationFrame(step); }
+        }
+        requestAnimationFrame(step);
+      });
+      statsIo.disconnect();
+    }
+  });
+}, {threshold:0.4});
+if(statEls.length){ statsIo.observe(statEls[0].closest('.stats-inner')); }
+</script>
+
+</body>
+</html>
